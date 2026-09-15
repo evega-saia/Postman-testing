@@ -31,17 +31,29 @@ pool:
 #  displayName: 'Install Postman CLI'
 
 steps:
+#- script: |
+#    curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+#  displayName: 'Install Postman CLI'
+
 - script: |
-    curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
-  displayName: 'Install Postman CLI'
+    npm install -g newman
+  displayName: 'Install Newman'
 
 - script: |
     postman login --with-api-key $(POSTMAN_API_KEY)
   displayName: 'Postman CLI login'
 
 - script: |
-    postman collection run 54809398-3b071a38-677a-4a40-b038-7f6a6bc3ccb7 -d ./spot-quote-data.csv
-  displayName: 'Run Postman collection'
+    newman run 4809398-3b071a38-677a-4a40-b038-7f6a6bc3ccb7 -d ./spot-quote-data.csv
+  displayName: 'Run collection with Newman'
+
+- script: |
+    postman login --with-api-key $(POSTMAN_API_KEY)
+  displayName: 'Postman CLI login'
+
+#- script: |
+#    postman collection run 54809398-3b071a38-677a-4a40-b038-7f6a6bc3ccb7 -d ./spot-quote-data.csv
+#  displayName: 'Run Postman collection'
 
 #- task: CmdLine@2
 #  displayName: 'Run automated API tests using Postman CLI'
