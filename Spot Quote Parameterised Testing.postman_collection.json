@@ -1,0 +1,117 @@
+{
+  "info": {
+    "_postman_id": "3b071a38-677a-4a40-b038-7f6a6bc3ccb7",
+    "name": "Spot Quote Parameterised Testing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54809398",
+    "_collection_link": "https://go.postman.co/collection/54809398-3b071a38-677a-4a40-b038-7f6a6bc3ccb7?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Spot Quote Sample Request",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Quote number is generated successfully\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.QuoteNumber).to.be.a('string').and.not.empty;",
+              "});",
+              "",
+              "pm.test(\"Total net invoice is calculated\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.TotalNetInvoice).to.be.a('number').and.to.be.above(0);",
+              "});",
+              "",
+              "pm.test(\"No error code returned\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.ErrorCode).to.equal(\"\");",
+              "});",
+              "",
+              "pm.test(\"Expiration date is present\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.ExpirationDate).to.be.a('string').and.not.empty;",
+              "});",
+              "",
+              "pm.test(\"Standard service days is a positive number\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.StandardServiceDays).to.be.a('number').and.to.be.above(0);",
+              "});",
+              "",
+              "pm.test(\"Calculated linear feet matches input\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    var expectedLinearFeet = parseFloat(pm.iterationData.get(\"linear_feet\") || pm.variables.get(\"linear_feet\"));",
+              "    if (!isNaN(expectedLinearFeet)) {",
+              "        pm.expect(jsonData.CalculatedLinearFeet).to.equal(expectedLinearFeet);",
+              "    }",
+              "});",
+              "",
+              "// Log scenario summary to console for debugging",
+              "var jsonData = pm.response.json();",
+              "var scenario = pm.iterationData.get(\"scenario_name\") || \"Unknown Scenario\";",
+              "console.log(\"Scenario: \" + scenario);",
+              "console.log(\"Quote Number: \" + jsonData.QuoteNumber);",
+              "console.log(\"Total Net Invoice: $\" + jsonData.TotalNetInvoice);",
+              "console.log(\"Service Days: \" + jsonData.StandardServiceDays);",
+              "console.log(\"Expiration: \" + jsonData.ExpirationDate);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"Accessorials\": [{\"Code\": \"{{accessorial_code}}\"}],\n    \"UserID\": \"{{user_id}}\",\n    \"Password\": \"{{password}}\",\n    \"PickupDate\": \"{{pickup_date}}\",\n    \"TotalWeight\": \"{{total_weight}}\",\n    \"LinearFeet\": {{linear_feet}},\n    \"OriginZip\": \"{{origin_zip}}\",\n    \"OriginCity\": \"{{origin_city}}\",\n    \"OriginState\": \"{{origin_state}}\",\n    \"OriginAddressLine1\": \"{{origin_address_line1}}\",\n    \"OriginAddressLine2\": \"{{origin_address_line2}}\",\n    \"DestZip\": \"{{dest_zip}}\",\n    \"DestCity\": \"{{dest_city}}\",\n    \"DestState\": \"{{dest_state}}\",\n    \"DestAddressLine1\": \"{{dest_address_line1}}\",\n    \"DestAddressLine2\": \"{{dest_address_line2}}\",\n    \"isFullAddressDetail\": true,\n    \"HandlingUnits\": {{handling_units}},\n    \"BillingTerm\": \"{{billing_term}}\",\n    \"AccountCode\": \"{{account_code}}\",\n    \"AccountType\": \"{{account_type}}\",\n    \"FreightValue\": {{freight_value}},\n    \"FreightClass\": \"{{freight_class}}\",\n    \"CODAmount\": 0,\n    \"AS400ID\": \"{{as400_id}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "text"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://www.saiasecure.com/webservice/spotquote/v1/api/SpotQuoteRequest",
+          "protocol": "https",
+          "host": [
+            "www",
+            "saiasecure",
+            "com"
+          ],
+          "path": [
+            "webservice",
+            "spotquote",
+            "v1",
+            "api",
+            "SpotQuoteRequest"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
