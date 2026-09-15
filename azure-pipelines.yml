@@ -37,7 +37,7 @@ steps:
 
 - script: |
     newman run "https://api.getpostman.com/collections/$(COLLECTION_ID)?apikey=$(POSTMAN_API_KEY)" \
-      -d C:/Repos/Postman/SampleSpotQuoteData.csv
+      -d "C:\Repos\Postman\SampleSpotQuoteData.csv"
   displayName: 'Run remote collection with local data file'
 #THIS WORKS ExCEPT FOR THE DATA FILE
 #- script: |
