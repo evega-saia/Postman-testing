@@ -45,7 +45,13 @@ steps:
   displayName: 'Run Postman tests via Newman'
 
 
-
+- task: PublishTestResults@2
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: 'results/newman-junit.xml'
+    testRunTitle: 'Postman API Tests'
+    failTaskOnFailedTests: true
 
 
 
