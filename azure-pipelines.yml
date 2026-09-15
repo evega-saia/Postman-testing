@@ -24,12 +24,16 @@ trigger:
 pool:
   # name: 'On-Prem DCA Azure Pipeline'
   name: 'On-Prem ADC OpenShift Agent Pool'
-steps:
-- task: NodeTool@0
+steps: 
+- task: UseNode@1
   inputs:
-    versionSpec: '20.x'
+    version: '18.x'
   displayName: 'Install Node.js'
 
+#- task: NodeTool@0
+#  inputs:
+#    versionSpec: '20.x'
+#  displayName: 'Install Node.js'
 
 - script: |
     npm install -g newman
