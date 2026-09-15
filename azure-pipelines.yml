@@ -36,16 +36,24 @@ steps:
   displayName: 'Install Newman'
 
 - script: |
-    postman login --with-api-key $(POSTMAN_API_KEY)
-  displayName: 'Postman CLI login'
+    curl -o collection.json -H "X-Api-Key: $(POSTMAN_API_KEY)" "https://api.getpostman.com/collections/$(COLLECTION_ID)"
+    newman run collection.json -d ./spot-quote-data.csv
+    
+#    curl -o environment.json -H "X-Api-Key: $(POSTMAN_API_KEY)" "https://api.getpostman.com/environments/$(ENVIRONMENT_ID)"
 
-- script: |
-    newman run 4809398-3b071a38-677a-4a40-b038-7f6a6bc3ccb7 -d ./spot-quote-data.csv
-  displayName: 'Run collection with Newman'
 
-- script: |
-    postman login --with-api-key $(POSTMAN_API_KEY)
-  displayName: 'Postman CLI login'
+
+#- script: |
+#    postman login --with-api-key $(POSTMAN_API_KEY)
+#  displayName: 'Postman CLI login'
+
+#- script: |
+#    newman run 4809398-3b071a38-677a-4a40-b038-7f6a6bc3ccb7 -d ./spot-quote-data.csv
+#  displayName: 'Run collection with Newman'
+
+#- script: |
+#    postman login --with-api-key $(POSTMAN_API_KEY)
+#  displayName: 'Postman CLI login'
 
 #- script: |
 #    postman collection run 54809398-3b071a38-677a-4a40-b038-7f6a6bc3ccb7 -d ./spot-quote-data.csv
