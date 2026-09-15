@@ -32,4 +32,4 @@ steps:
     script: |
         postman login --with-api-key $(POSTMAN_API_KEY)
         # Run your collection using Postman CLI
-        postman collection run "54809398-3b071a38-677a-4a40-b038-7f6a6bc3ccb7"
+        postman collection run 54809398-3b071a38-677a-4a40-b038-7f6a6bc3ccb7 -d ./spot-quote-data.csv
