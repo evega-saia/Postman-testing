@@ -22,18 +22,14 @@ trigger:
 #  vmImage: 'windows-latest'
 
 pool:
-      # name: 'On-Prem DCA Azure Pipeline'
+  # name: 'On-Prem DCA Azure Pipeline'
   name: 'On-Prem ADC OpenShift Agent Pool'
-
-#steps:
-#- script: |
-#    powershell.exe -NoProfile -InputFormat None -ExecutionPolicy AllSigned -Command "[System.Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://dl-cli.pstmn.io/install/win64.ps1'))"
-#  displayName: 'Install Postman CLI'
-
 steps:
-#- script: |
-#    curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
-#  displayName: 'Install Postman CLI'
+- task: NodeTool@0
+  inputs:
+    versionSpec: '20.x'
+  displayName: 'Install Node.js'
+
 
 - script: |
     npm install -g newman
