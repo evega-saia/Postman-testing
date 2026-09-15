@@ -18,8 +18,12 @@ trigger:
 #    echo See https://aka.ms/yaml
 #  displayName: 'Run a multi-line script'
 
+#pool:
+#  vmImage: 'windows-latest'
+
 pool:
-  vmImage: 'windows-latest'
+      # name: 'On-Prem DCA Azure Pipeline'
+  name: 'On-Prem ADC OpenShift Agent Pool'
 
 steps:
 - script: |
