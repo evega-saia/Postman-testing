@@ -36,9 +36,27 @@ steps:
   displayName: 'Install Newman'
 
 - script: |
+    npm install -g newman newman-reporter-junit newman-reporter-htmlextra
     newman run "https://api.getpostman.com/collections/$(COLLECTION_ID)?apikey=$(POSTMAN_API_KEY)" \
-      -d SampleSpotQuoteData.csv
-  displayName: 'Run remote collection with local data file'
+    -d SampleSpotQuoteData.csv \
+    --reporters cli,junit,htmlextra \
+    --reporter-junit-export results/newman-junit.xml \
+    --reporter-htmlextra-export results/newman-report.html
+  displayName: 'Run Postman tests via Newman'
+
+
+
+
+
+
+
+#THIS WORKED COMPLETELY!
+#- script: |
+#    newman run "https://api.getpostman.com/collections/$(COLLECTION_ID)?apikey=$(POSTMAN_API_KEY)" \
+#      -d SampleSpotQuoteData.csv
+#  displayName: 'Run remote collection with local data file'
+
+
 #THIS WORKS ExCEPT FOR THE DATA FILE
 #- script: |
 #    curl -o collection.json -H "X-Api-Key: $(POSTMAN_API_KEY)" "https://api.getpostman.com/collections/$(COLLECTION_ID)"
