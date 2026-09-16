@@ -1,0 +1,101 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+#pool:
+#  vmImage: ubuntu-latest
+
+#steps:
+#- script: echo Hello, world!
+#  displayName: 'Run a one-line script'
+
+#- script: |
+#    echo Add other tasks to build, test, and deploy your project.
+#    echo See https://aka.ms/yaml
+#  displayName: 'Run a multi-line script'
+
+#pool:
+#  vmImage: 'windows-latest'
+
+pool:
+  # name: 'On-Prem DCA Azure Pipeline'
+  name: 'On-Prem ADC OpenShift Agent Pool'
+steps: 
+- task: UseNode@1
+  inputs:
+    version: '18.x'
+  displayName: 'Install Node.js'
+
+#- task: NodeTool@0
+#  inputs:
+#    versionSpec: '20.x'
+#  displayName: 'Install Node.js'
+
+- script: |
+    npm install -g newman
+  displayName: 'Install Newman'
+
+- script: |
+    npm install -g newman newman-reporter-junit newman-reporter-htmlextra
+    newman run "https://api.getpostman.com/collections/$(COLLECTION_ID)?apikey=$(POSTMAN_API_KEY)" \
+    -d SampleSpotQuoteData.csv \
+    --reporters cli,junit,htmlextra \
+    --reporter-junit-export results/newman-junit.xml \
+    --reporter-htmlextra-export results/newman-report.html
+  displayName: 'Run Postman tests via Newman'
+
+
+- task: PublishTestResults@2
+  condition: succeededOrFailed()
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: 'results/newman-junit.xml'
+    testRunTitle: 'Postman API Tests'
+    failTaskOnFailedTests: true
+
+
+
+
+#THIS WORKED COMPLETELY!
+#- script: |
+#    newman run "https://api.getpostman.com/collections/$(COLLECTION_ID)?apikey=$(POSTMAN_API_KEY)" \
+#      -d SampleSpotQuoteData.csv
+#  displayName: 'Run remote collection with local data file'
+
+
+#THIS WORKS ExCEPT FOR THE DATA FILE
+#- script: |
+#    curl -o collection.json -H "X-Api-Key: $(POSTMAN_API_KEY)" "https://api.getpostman.com/collections/$(COLLECTION_ID)"
+#    newman run collection.json -d ./spot-quote-data.csv
+    
+#    curl -o environment.json -H "X-Api-Key: $(POSTMAN_API_KEY)" "https://api.getpostman.com/environments/$(ENVIRONMENT_ID)"
+
+
+
+#- script: |
+#    postman login --with-api-key $(POSTMAN_API_KEY)
+#  displayName: 'Postman CLI login'
+
+#- script: |
+#    newman run 4809398-3b071a38-677a-4a40-b038-7f6a6bc3ccb7 -d ./spot-quote-data.csv
+#  displayName: 'Run collection with Newman'
+
+#- script: |
+#    postman login --with-api-key $(POSTMAN_API_KEY)
+#  displayName: 'Postman CLI login'
+
+#- script: |
+#    postman collection run 54809398-3b071a38-677a-4a40-b038-7f6a6bc3ccb7 -d ./spot-quote-data.csv
+#  displayName: 'Run Postman collection'
+
+#- task: CmdLine@2
+#  displayName: 'Run automated API tests using Postman CLI'
+#  inputs:
+#    script: |
+#        postman login --with-api-key $(POSTMAN_API_KEY)
+#        # Run your collection using Postman CLI
+#        postman collection run 54809398-3b071a38-677a-4a40-b038-7f6a6bc3ccb7 -d ./spot-quote-data.csv
