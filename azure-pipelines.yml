@@ -40,11 +40,11 @@ steps:
   displayName: 'Install Newman'
 
 - script: |
-    npm install -g newman newman-reporter-junit newman-reporter-htmlextra
+    npm install -g newman newman-reporter-junitfull newman-reporter-htmlextra
     newman run "https://api.getpostman.com/collections/$(COLLECTION_ID)?apikey=$(POSTMAN_API_KEY)" \
     -d SampleSpotQuoteData.csv \
-    --reporters cli,junit,htmlextra \
-    --reporter-junit-export results/newman-junit.xml \
+    --reporters cli,junitfull,htmlextra \
+    --reporter-junitfull-export results/newman-junit.xml \
     --reporter-htmlextra-export results/newman-report.html
   displayName: 'Run Postman tests via Newman'
 
